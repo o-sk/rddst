@@ -1,6 +1,10 @@
 package rddst
 
-import "net/http"
+import (
+	"net/http"
+
+	"golang.org/x/xerrors"
+)
 
 type Rddst interface {
 	GetRedirectDestination(url string) (string, error)
@@ -17,5 +21,13 @@ func NewRddst(client *http.Client) Rddst {
 }
 
 func (r *rddst) GetRedirectDestination(url string) (string, error) {
-	return url, nil
+	resp, err := r.client.Head(url)
+	if err != nil {
+		return "", err
+	}
+	dst := resp.Request.URL.String()
+	if dst == url {
+		return "", xerrors.New("The url is not redirect")
+	}
+	return dst, nil
 }
