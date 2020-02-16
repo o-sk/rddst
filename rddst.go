@@ -10,11 +10,15 @@ type Rddst interface {
 	GetRedirectDestination(url string) (string, error)
 }
 
-type rddst struct {
-	client *http.Client
+type httpClient interface {
+	Head(url string) (resp *http.Response, err error)
 }
 
-func NewRddst(client *http.Client) Rddst {
+type rddst struct {
+	client httpClient
+}
+
+func NewRddst(client httpClient) Rddst {
 	return &rddst{
 		client: client,
 	}
