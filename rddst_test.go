@@ -90,7 +90,7 @@ func TestGetRedirectDestination(t *testing.T) {
 	} {
 		t.Run(tt.description, func(t *testing.T) {
 			r := rddst.NewRddst(NewMockClient(tt.mockParam.resp, tt.mockParam.err))
-			resp, err := r.GetRedirectDestination("https://example.com")
+			resp, err := r.GetRedirectDestination("https://example.com", true)
 			assert.Equal(t, tt.expect.resp, resp)
 			if tt.expect.err != nil {
 				assert.Equal(t, tt.expect.err.Error(), err.Error())

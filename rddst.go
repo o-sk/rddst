@@ -7,7 +7,7 @@ import (
 )
 
 type Rddst interface {
-	GetRedirectDestination(url string) (string, error)
+	GetRedirectDestination(url string, strictly bool) (string, error)
 }
 
 type HttpClient interface {
@@ -24,13 +24,13 @@ func NewRddst(client HttpClient) Rddst {
 	}
 }
 
-func (r *rddst) GetRedirectDestination(url string) (string, error) {
+func (r *rddst) GetRedirectDestination(url string, strictly bool) (string, error) {
 	resp, err := r.client.Head(url)
 	if err != nil {
 		return "", err
 	}
 	dst := resp.Request.URL.String()
-	if dst == url {
+	if strictly && dst == url {
 		return "", xerrors.New("The url is not redirect")
 	}
 	return dst, nil

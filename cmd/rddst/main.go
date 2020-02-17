@@ -21,7 +21,7 @@ func main() {
 			}
 
 			r := rddst.NewRddst(&http.Client{})
-			dst, err := r.GetRedirectDestination(c.Args().Get(0))
+			dst, err := r.GetRedirectDestination(c.Args().Get(0), true)
 			if err != nil {
 				return cli.Exit(err, 1)
 			}
