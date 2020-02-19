@@ -15,13 +15,20 @@ func main() {
 		Name:        "rddst",
 		Usage:       "rddst <url>",
 		Description: "Get redirect destination",
+		Flags: []cli.Flag{
+			&cli.BoolFlag{
+				Name:    "strict",
+				Aliases: []string{"s"},
+				Value:   false,
+			},
+		},
 		Action: func(c *cli.Context) error {
 			if c.NArg() != 1 {
 				return cli.Exit("Argument error", 1)
 			}
 
 			r := rddst.NewRddst(&http.Client{})
-			dst, err := r.GetRedirectDestination(c.Args().Get(0), true)
+			dst, err := r.GetRedirectDestination(c.Args().Get(0), c.Bool("strict"))
 			if err != nil {
 				return cli.Exit(err, 1)
 			}
